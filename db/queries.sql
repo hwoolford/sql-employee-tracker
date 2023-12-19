@@ -24,3 +24,7 @@ db.query('SELECT * FROM role', function (err, results) {
 db.query('SELECT * FROM employee', function (err, results) {
     console.log(results);
 });
+
+-- SELECT *
+-- FROM course_names
+-- JOIN department ON course_names.department = department.id;
