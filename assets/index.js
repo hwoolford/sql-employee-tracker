@@ -7,8 +7,8 @@ const questions = () => {
             message: "What would you like to do?",
             name: "question",
             choices: [
-                "View All Employees",
                 "Add Employee",
+                "View All Employees",
                 "Update Employee Role",
                 "View All Roles",
                 "Add Role",
@@ -155,3 +155,17 @@ const questions = () => {
         },
     ]);
 };
+
+const init = () => {
+    questions()
+      .then(() => {
+      if (answer.question === "Quit") {
+        console.log("Thank You")
+      } else {
+        questions();
+      }
+    })
+      .catch((err) => console.log(err));
+  }
+  
+  init();
