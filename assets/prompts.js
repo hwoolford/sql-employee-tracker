@@ -21,8 +21,8 @@ const questions = () => {
             type: "input",
             message: "What is the name of the department?",
             name: "department",
-            when(answer) {
-                return answer.question === "Add Department"
+            when(answers) {
+                return answers.question === "Add Department"
             },
             // Added (dept name) to the database.
         },
@@ -30,8 +30,8 @@ const questions = () => {
             type: "input",
             message: "What is the name of the role?",
             name: "role",
-            when(answer) {
-                return answer.question === "Add Role"
+            when(answers) {
+                return answers.question === "Add Role"
             },
             
         },
@@ -39,8 +39,8 @@ const questions = () => {
             type: "input",
             message: "What is the salary of the role?",
             name: "roleSalary",
-            when(answer) {
-                return answer.question === "Add Role"
+            when(answers) {
+                return answers.question === "Add Role"
             },
             
         },
@@ -55,8 +55,8 @@ const questions = () => {
                 "Sales",
                 "Service",
             ],
-            when(answer) {
-                return answer.question === "Add Role"
+            when(answers) {
+                return answers.question === "Add Role"
             },
             
         },
@@ -64,16 +64,16 @@ const questions = () => {
             type: "input",
             message: "What is the employee's first name?",
             name: "employeeFirst",
-            when(answer) {
-                return answer.question === "Add Employee"
+            when(answers) {
+                return answers.question === "Add Employee"
             },
         },
         {
             type: "input",
             message: "What is the employee's last name?",
             name: "employeeLast",
-            when(answer) {
-                return answer.question === "Add Employee"
+            when(answers) {
+                return answers.question === "Add Employee"
             },
         },
         {
@@ -91,8 +91,8 @@ const questions = () => {
                 "Lawyer",
                 "Customer Service",
             ],
-            when(answer) {
-                return answer.question === "Add Employee"
+            when(answers) {
+                return answers.question === "Add Employee"
             },
             
         },
@@ -109,8 +109,8 @@ const questions = () => {
                 "Kunal Singh",
                 "Malia Brown",
             ],
-            when(answer) {
-                return answer.question === "Add Employee"
+            when(answers) {
+                return answers.question === "Add Employee"
             },
             
         },
@@ -129,8 +129,8 @@ const questions = () => {
                 "Tom Allen",
                 "Sam Kash",
             ],
-            when(answer) {
-                return answer.question === "Update Employee Role"
+            when(answers) {
+                return answers.question === "Update Employee Role"
             },
         },
         {
@@ -148,8 +148,8 @@ const questions = () => {
                 "Lawyer",
                 "Customer Service",
             ],
-            when(answer) {
-                return answer.question === "Update Employee Role"
+            when(answers) {
+                return answers.question === "Update Employee Role"
             },
             
         },
@@ -159,7 +159,7 @@ const questions = () => {
 const init = () => {
     questions()
       .then(() => {
-      if (answer.question === "Quit") {
+      if (answers.question === "Quit") {
         console.log("Thank You")
       } else {
         questions();
