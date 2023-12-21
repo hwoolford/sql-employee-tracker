@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-
+// Connect to tracker_db database
 const db = mysql.createConnection(
   {
       host: 'localhost',
@@ -19,21 +19,24 @@ const db = mysql.createConnection(
       password: '',
       database: 'tracker_db'
   },
+  console.log(`Connected to the tracker_db database.`)
 );
 
-db.query('SELECT * FROM department', function (err, results) {
-  console.log(results);
+app.get('/api/departments', (req, res) => {
+  const sql = `SELECT id, department_name AS department FROM department`;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({error: err.message});
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: rows
+    });
+  });
 });
 
-
-db.query('SELECT * FROM role', function (err, results) {
-  console.log(results);
-});
-
-
-db.query('SELECT * FROM employee', function (err, results) {
-  console.log(results);
-});
 
 app.use((req, res) => {
     res.status(404).end();
