@@ -1,34 +1,34 @@
 USE tracker_db;
 
-INSERT INTO department
+INSERT INTO department (department_name)
 VALUES
-(100, "Engineering"),
-(101, "Finance"),
-(102, "Legal"),
-(103, "Sales"),
-(104, "Service");
+("Engineering"),
+("Finance"),
+("Legal"),
+("Sales"),
+("Service");
 
-INSERT INTO role
+INSERT INTO role (title, salary, department_id)
 VALUES
-(200, "Sales Lead", 80000, 103),
-(201, "Salesperson", 50000, 103),
-(202, "Lead Engineer", 100000, 100),
-(203, "Software Engineer", 90000, 100),
-(204, "Account Manager", 70000, 101),
-(205, "Accountant", 80000, 101),
-(206, "Legal Team Lead", 120000, 102),
-(207, "Lawyer", 100000, 102),
-(208, "Customer Service", 50000, 104);
+("Sales Lead", 80000, 4),
+("Salesperson", 50000, 4),
+("Lead Engineer", 100000, 1),
+("Software Engineer", 90000, 1),
+("Account Manager", 70000, 2),
+("Accountant", 80000, 2),
+("Legal Team Lead", 120000, 3),
+("Lawyer", 100000, 3),
+("Customer Service", 50000, 5);
 
-INSERT INTO employee
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-(001, "John", "Doe", 200, 006),
-(002, "Mike", "Chan", 201, 005),
-(003, "Ashley", "Rodriguez", 202, 001),
-(004, "Kevin", "Tupik", 203, 002),
-(005, "Kunal", "Singh", 204, 004),
-(006, "Malia", "Brown", 205, 004),
-(007, "Sarah", "Lourd", 206, 003),
-(008, "Tom", "Allen", 207, 005),
-(009, "Sam", "Kash", 208, 001);
+("John", "Doe", 1, 6),
+("Mike", "Chan", 2, 5),
+("Ashley", "Rodriguez", 3, 1),
+("Kevin", "Tupik", 4, 2),
+("Kunal", "Singh", 5, 4),
+("Malia", "Brown", 6, 4),
+("Sarah", "Lourd", 7, 3),
+("Tom", "Allen", 8, 5),
+("Sam", "Kash", 9, 1);
 
