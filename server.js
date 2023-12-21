@@ -9,13 +9,31 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 app.use(express.static("public"));
 
 
+const db = mysql.createConnection(
+  {
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'tracker_db'
+  },
+);
+
+db.query('SELECT * FROM department', function (err, results) {
+  console.log(results);
+});
 
 
+db.query('SELECT * FROM role', function (err, results) {
+  console.log(results);
+});
+
+
+db.query('SELECT * FROM employee', function (err, results) {
+  console.log(results);
+});
 
 app.use((req, res) => {
     res.status(404).end();
