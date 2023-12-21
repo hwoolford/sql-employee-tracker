@@ -122,6 +122,30 @@ db.post('/api/new-employee', ({body}, res) => {
   });
 });
 
+// Update employee role
+app.put('/api/role/:id', (req, res) => {
+  const sql = `UPDATE role SET role = ? WHERE id = ?`;
+  const params = [req.body.role, req.params.id];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+    } else if (!result.affectedRows) {
+      res.json({
+        message: 'Role not found'
+      });
+    } else {
+      res.json({
+        message: 'success',
+        data: req.body,
+        changes: result.affectedRows
+      });
+    }
+  });
+});
+
+
+
 // Response for any requests not found
 app.use((req, res) => {
     res.status(404).end();
