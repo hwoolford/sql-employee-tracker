@@ -1,3 +1,5 @@
+SELECT department.department_name, role.department_id, employee.role_id, employee.manager_id
+FROM employee
 
 
 
