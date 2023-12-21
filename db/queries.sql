@@ -1,11 +1,10 @@
-SELECT department.department_name, role.department_id, employee.role_id, employee.manager_id
+SELECT department.department_name, department.id AS department_id
+FROM department;
+SELECT role.title, role.id AS role_id, department.department_name, role.salary
+FROM role
+JOIN department ON role.department_id = department.id;
+SELECT employee.id, employee.first_name, employee.last_name, role.title, department.department_name, role.salary, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
 FROM employee
-
-
-
-
-
-
--- SELECT *
--- FROM course_names
--- JOIN department ON course_names.department = department.id;
+JOIN role ON employee.role_id = role.id
+JOIN department ON role.department_id = department.id
+LEFT JOIN employee AS manager ON employee.manager_id = manager.id;
