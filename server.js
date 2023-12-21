@@ -19,7 +19,6 @@ const db = mysql.createConnection(
       password: '',
       database: 'tracker_db'
   },
-  console.log(`Connected to the tracker_db database.`)
 );
 
 // Show all departments
@@ -71,7 +70,7 @@ app.get('/api/employee', (req, res) => {
 });
 
 // Add a new department
-db.post('/api/new-department', ({body}, res) => {
+app.post('/api/new-department', ({body}, res) => {
   const sql = `INSERT INTO department (department_name) VALUES (?)`;
   const params = [body.department_name];
 
@@ -81,14 +80,14 @@ db.post('/api/new-department', ({body}, res) => {
       return;
     }
     res.json({
-      message: 'success',
+      message: 'Department name added to the database.',
       data: body
     });
   });
 });
 
 // Add a new role
-db.post('/api/new-role', ({body}, res) => {
+app.post('/api/new-role', ({body}, res) => {
   const sql = `INSERT INTO role (title, salary, department_name) VALUES (?)`;
   const params = [body.title, body.salary, body.department_name];
 
@@ -98,17 +97,16 @@ db.post('/api/new-role', ({body}, res) => {
       return;
     }
     res.json({
-      message: 'success',
+      message: 'Role added to the database.',
       data: body
     });
   });
 });
 
 // Add a new employee
-db.post('/api/new-employee', ({body}, res) => {
+app.post('/api/new-employee', ({body}, res) => {
     const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
     const params = [body.first_name, body.last_name, body.title, body.manager_first_name, body.manager_last_name];
-  
 
   db.query(sql, params, (err, result) => {
     if (err) {
@@ -116,7 +114,7 @@ db.post('/api/new-employee', ({body}, res) => {
       return;
     }
     res.json({
-      message: 'success',
+      message: 'Employee added to the database.',
       data: body
     });
   });
@@ -130,13 +128,9 @@ app.put('/api/role/:id', (req, res) => {
   db.query(sql, params, (err, result) => {
     if (err) {
       res.status(400).json({ error: err.message });
-    } else if (!result.affectedRows) {
-      res.json({
-        message: 'Role not found'
-      });
     } else {
       res.json({
-        message: 'success',
+        message: 'Employee role updated.',
         data: req.body,
         changes: result.affectedRows
       });

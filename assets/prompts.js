@@ -24,7 +24,6 @@ const questions = () => {
             when(answers) {
                 return answers.question === "Add Department"
             },
-            // Added (dept name) to the database.
         },
         {
             type: "input",
@@ -158,14 +157,35 @@ const questions = () => {
 
 const init = () => {
     questions()
-      .then(() => {
-      if (answers.question === "Quit") {
-        console.log("Thank You")
-      } else {
-        questions();
-      }
-    })
-      .catch((err) => console.log(err));
-  }
+    .then((answers) => {
+        const {question} = answers
+        if (question === 'View All Departments') {
+            axios.get('http://localhost:3000/api/department')
+              .then((response) => {
+                console.log(response.data);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+         } else if (question === 'View All Roles') {
+            axios.get('http://localhost:3000/api/role')
+              .then((response) => {
+                console.log(response.data);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+         } else if (question === 'View All Employees') {
+            axios.get('http://localhost:3000/api/employee')
+              .then((response) => {
+                console.log(response.data);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+         }
+    });
+}
+
   
   init();
