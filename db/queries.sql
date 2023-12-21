@@ -1,9 +1,9 @@
 SELECT department.department_name, department.id AS department_id
 FROM department;
-SELECT role.title, role.id AS role_id, department.department_name, role.salary
+SELECT role.title AS job_title, role.id AS role_id, department.department_name AS department, role.salary
 FROM role
 JOIN department ON role.department_id = department.id;
-SELECT employee.id, employee.first_name, employee.last_name, role.title, department.department_name, role.salary, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
+SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.title AS job_title, department.department_name AS department, role.salary, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
 FROM employee
 JOIN role ON employee.role_id = role.id
 JOIN department ON role.department_id = department.id
