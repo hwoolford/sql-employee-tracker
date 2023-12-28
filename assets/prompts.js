@@ -164,6 +164,7 @@ const init = () => {
             axios.get('http://localhost:3001/api/department')
               .then((response) => {
                 console.log(response.data);
+                init();
               })
               .catch((error) => {
                 console.error(error);
@@ -172,6 +173,7 @@ const init = () => {
             axios.get('http://localhost:3001/api/role')
               .then((response) => {
                 console.log(response.data);
+                init();
               })
               .catch((error) => {
                 console.error(error);
@@ -180,6 +182,7 @@ const init = () => {
             axios.get('http://localhost:3001/api/employee')
               .then((response) => {
                 console.log(response.data);
+                init();
               })
               .catch((error) => {
                 console.error(error);
