@@ -1,5 +1,19 @@
+const express = require("express");
 const inquirer = require("inquirer");
-const axios = require('axios');
+const mysql = require('mysql2');
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'tracker_db'
+    },
+  );
 
 const questions = () => {
     return inquirer.prompt([
@@ -161,32 +175,58 @@ const init = () => {
     .then((answers) => {
         const {question} = answers
         if (question === 'View All Departments') {
-            axios.get('http://localhost:3001/api/department')
-              .then((response) => {
-                console.log(response.data);
-                init();
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+            const sql = `SELECT id AS department_id, department_name AS department FROM department`;
+            db.query(sql, (err, res) => {
+                if (err) {
+                  res.status(500).json({error: err.message});
+                  return;
+                } else {
+                    console.table(res)
+                    init()
+                }
+            })
+
          } else if (question === 'View All Roles') {
-            axios.get('http://localhost:3001/api/role')
-              .then((response) => {
-                console.log(response.data);
-                init();
-              })
-              .catch((error) => {
-                console.error(error);
-              });
+            const sql = `SELECT role.id AS role_id, role.title AS job_title, department.department_name AS department, role.salary FROM role JOIN department ON role.department_id = department.id`;
+            db.query(sql, (err, res) => {
+                if (err) {
+                  res.status(500).json({error: err.message});
+                  return;
+                } else {
+                    console.table(res)
+                    init()
+                }
+            })
+
          } else if (question === 'View All Employees') {
-            axios.get('http://localhost:3001/api/employee')
-              .then((response) => {
-                console.log(response.data);
-                init();
-              })
-              .catch((error) => {
-                console.error(error);
+            const sql = `SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.title AS job_title, department.department_name AS department, role.salary, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id`;
+            db.query(sql, (err, res) => {
+                if (err) {
+                  res.status(500).json({error: err.message});
+                  return;
+                } else {
+                    console.table(res)
+                    init()
+                }
+            })
+         } else if (question === 'Add Department') {
+            app.post('/api/new-department', ({body}, res) => {
+                const sql = `INSERT INTO department (department_name) VALUES (?)`;
+                const params = [body.department_name];
+              
+                db.query(sql, params, (err, result) => {
+                  if (err) {
+                    res.status(400).json({error: err.message});
+                    return;
+                  } else {
+                  res.json({
+                    message: 'Department name added to the database.',
+                    data: body
+                  });
+                }
+                });
               });
+              init()
          }
     });
 }
