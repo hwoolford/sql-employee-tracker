@@ -161,7 +161,7 @@ const init = () => {
     .then((answers) => {
         const {question} = answers
         if (question === 'View All Departments') {
-            axios.get('http://localhost:3000/api/department')
+            axios.get('http://localhost:3001/api/department')
               .then((response) => {
                 console.log(response.data);
               })
@@ -169,7 +169,7 @@ const init = () => {
                 console.error(error);
               });
          } else if (question === 'View All Roles') {
-            axios.get('http://localhost:3000/api/role')
+            axios.get('http://localhost:3001/api/role')
               .then((response) => {
                 console.log(response.data);
               })
@@ -177,7 +177,7 @@ const init = () => {
                 console.error(error);
               });
          } else if (question === 'View All Employees') {
-            axios.get('http://localhost:3000/api/employee')
+            axios.get('http://localhost:3001/api/employee')
               .then((response) => {
                 console.log(response.data);
               })
