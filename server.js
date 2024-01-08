@@ -60,14 +60,28 @@ const questions = () => {
         return answers.question === "Add Role";
       },
     },
+    // {
+    //   type: "list",
+    //   message: "Which department does the role belong to?",
+    //   name: "roleDepartment",
+    //   choices: ["Engineering", "Finance", "Legal", "Sales", "Service"], //pull from department table or something not hard code
+    //   when(answers) {
+    //     return answers.question === "Add Role";
+    //   },
+    // },
     {
       type: "list",
       message: "Which department does the role belong to?",
       name: "roleDepartment",
-      choices: ["Engineering", "Finance", "Legal", "Sales", "Service"],
+      choices: async function() {
+        const dataAndColDefArray = await connection.promise().query(
+          "SELECT department.id AS value, department.name AS name FROM department;"
+        );
+        return dataAndColDefArray[0];
+      },
       when(answers) {
         return answers.question === "Add Role";
-      },
+        },
     },
     {
       type: "input",
@@ -85,21 +99,35 @@ const questions = () => {
         return answers.question === "Add Employee";
       },
     },
+    // {
+    //   type: "list",
+    //   message: "What is the employee's role?",
+    //   name: "employeeRole",
+    //   choices: [
+    //     "Sales Lead",
+    //     "Salesperson",
+    //     "Lead Engineer",
+    //     "Software Engineer",
+    //     "Account Manager",
+    //     "Accountant",
+    //     "Legal Team Lead",
+    //     "Lawyer",
+    //     "Customer Service",
+    //   ],
+    //   when(answers) {
+    //     return answers.question === "Add Employee";
+    //   },
+    // },
     {
       type: "list",
       message: "What is the employee's role?",
       name: "employeeRole",
-      choices: [
-        "Sales Lead",
-        "Salesperson",
-        "Lead Engineer",
-        "Software Engineer",
-        "Account Manager",
-        "Accountant",
-        "Legal Team Lead",
-        "Lawyer",
-        "Customer Service",
-      ],
+      choices: async function() {
+        const dataAndColDefArray = await connection.promise().query(
+          "SELECT role.id AS value, role.name AS name FROM role;"
+        );
+        return dataAndColDefArray[0];
+      },
       when(answers) {
         return answers.question === "Add Employee";
       },
@@ -169,8 +197,7 @@ const init = () => {
       const sql = `SELECT id AS department_id, department_name AS department FROM department`;
       db.query(sql, (err, res) => {
         if (err) {
-          res.status(500).json({ error: err.message });
-          return;
+          console.error(err);
         } else {
           console.table(res);
           init();
@@ -180,8 +207,7 @@ const init = () => {
       const sql = `SELECT role.id AS role_id, role.title AS job_title, department.department_name AS department, role.salary FROM role JOIN department ON role.department_id = department.id`;
       db.query(sql, (err, res) => {
         if (err) {
-          res.status(500).json({ error: err.message });
-          return;
+          console.error(err);
         } else {
           console.table(res);
           init();
@@ -191,8 +217,7 @@ const init = () => {
       const sql = `SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.title AS job_title, department.department_name AS department, role.salary, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id`;
       db.query(sql, (err, res) => {
         if (err) {
-          res.status(500).json({ error: err.message });
-          return;
+          console.error(err);
         } else {
           console.table(res);
           init();
@@ -200,82 +225,78 @@ const init = () => {
       });
     } else if (question === "Add Department") {
       // app.post("/api/new-department", ({ body }, res) => {
-        const sql = `INSERT INTO department (department_name) VALUES (?)`;
-        const params = [answers.department];
+      const sql = `INSERT INTO department (department_name) VALUES (?)`;
+      const params = [answers.department];
 
-        db.query(sql, params, (err, result) => {
-          if (err) {
-            result.status(500).json({ error: err.message });
-            return;
-          }
+      db.query(sql, params, (err, result) => {
+        if (err) {
+          console.error(err);
+          return;
+        } else {
           // res.json({
           //   message: "Department name added to the database.",
           //   data: body,
           // });
+          // });
+          init();
+        }
+      });
+    } else if (question === "Add Role") {
+      // app.post("/api/new-role", ({ body }, res) => {
+      const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+      const params = [answers.title, answers.salary, answers.department];
+
+      db.query(sql, params, (err, res) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        // res.json({
+        //   message: "Role added to the database.",
+        //   data: body,
         // });
         init();
       });
-      
-    } else if (question === "Add Role") {
-      // app.post("/api/new-role", ({ body }, res) => {
-        const sql = `INSERT INTO role (title, salary, department_name) VALUES (?)`;
-        const params = [answers.title, answers.salary, answers.department];
-
-        db.query(sql, params, (err, res) => {
-          if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-          }
-          // res.json({
-          //   message: "Role added to the database.",
-          //   data: body,
-          // });
-          init();
-        });
       // });
-      
     } else if (question === "Add Employee") {
       // app.post("/api/new-employee", ({ body }, res) => {
-        const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
-        const params = [
-          answers.first_name,
-          answers.last_name,
-          answers.title,
-          answers.manager_first_name,
-          answers.manager_last_name,
-        ];
+      const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
+      const params = [
+        answers.first_name,
+        answers.last_name,
+        answers.title,
+        answers.manager_first_name,
+        answers.manager_last_name,
+      ];
 
-        db.query(sql, params, (err, res) => {
-          if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-          }
-          // res.json({
-          //   message: "Employee added to the database.",
-          //   data: body,
-          // });
-          init();
-        });
+      db.query(sql, params, (err, res) => {
+        if (err) {
+          console.error(err)
+        } else {
+        // res.json({
+        //   message: "Employee added to the database.",
+        //   data: body,
+        // });
+        init();
+      }
+      });
       // });
-      
     } else if (question === "Update Employee Role") {
       // app.put("/api/role/:id", (req, res) => {
-        const sql = `UPDATE role SET role = ? WHERE id = ?`;
-        const params = [req.body.role, req.params.id];
+      const sql = `UPDATE role SET role = ? WHERE id = ?`;
+      const params = [req.body.role, req.params.id];
 
-        db.query(sql, params, (err, result) => {
-          if (err) {
-            res.status(400).json({ error: err.message });
-          } else {
-            res.json({
-              message: "Employee role updated.",
-              data: req.body,
-              changes: result.affectedRows,
-            });
-          }
-        });
+      db.query(sql, params, (err, result) => {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+        } else {
+          console.log("Success")
+          init();
+        }
+      });
       // });
-      init();
+      
     }
   });
 };
