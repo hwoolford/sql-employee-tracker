@@ -18,6 +18,7 @@ const db = mysql.createConnection({
   database: "tracker_db",
 });
 
+// Initial Prompt
 const question = () => {
   return inquirer.prompt([
     {
@@ -39,7 +40,7 @@ const question = () => {
 };
 
 
-
+// Functions based on answer to initial prompt
 const init = () => {
   question().then((answers) => {
     const { question } = answers;
@@ -126,7 +127,7 @@ const init = () => {
           console.error(err);
           process.exit(1);
         } else {
-          console.log("Employee role has been added successfully")
+          console.log("\nEmployee role has been added successfully")
           init();
         }
       });
@@ -178,7 +179,7 @@ const init = () => {
           console.error(err);
           process.exit(1);
         } else {
-          console.log("Employee has been added successfully")
+          console.log("\nEmployee has been added successfully")
           init();
         }
       });
@@ -214,11 +215,12 @@ const init = () => {
           console.error(err);
           process.exit(1);
         } else {
-          console.log("Employee role has been updated successfully")
+          console.log("\nEmployee role has been updated successfully")
           init();
         }
       })
     } else if (question === "Quit") {
+      console.log("\nGoodbye!")
       process.exit(1);
     }
   })
@@ -232,7 +234,7 @@ app.use((req, res) => {
 });
 
 // Listens to the port to start the server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`\nServer running on port ${PORT}`));
 
 
 
