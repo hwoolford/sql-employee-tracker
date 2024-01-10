@@ -113,7 +113,7 @@ const init = () => {
           message: "Which department does the role belong to?",
           name: "roleDepartment",
           choices: async function() {
-            const deptList = await connection.promise().query(
+            const deptList = await db.promise().query(
               `SELECT id AS department_id, department_name AS department FROM department;`
             );
             return deptList[0];
@@ -148,7 +148,7 @@ const init = () => {
           message: "What is the employee's role?",
           name: "employeeRole",
           choices: async function() {
-            const roleList = await connection.promise().query(
+            const roleList = await db.promise().query(
               `SELECT role.id AS role_id, role.title AS job_title FROM role;`
             );
             return roleList[0];
@@ -159,7 +159,7 @@ const init = () => {
           message: "Who is the employee's manager?",
           name: "employeeManager",
           choices: async function() {
-            const managerList = await connection.promise().query(
+            const managerList = await db.promise().query(
               `SELECT employee.id AS value, employee.first_name AS first, employee.last_name AS last FROM employee;`
             );
             return managerList[0];
@@ -190,8 +190,8 @@ const init = () => {
           message: "Which Employee's role do you want to update?",
           name: "updateRole",
           choices: async function() {
-            const employeeList = await connection.promise().query(
-              `SELECT employee.id AS value, employee.first_name AS first, employee.last_name AS last FROM employee;`
+            const employeeList = await db.promise().query(
+              `SELECT employee.first_name AS first, employee.last_name AS last FROM employee;`
             );
             return employeeList[0];
           }
@@ -201,7 +201,7 @@ const init = () => {
           message: "Which role do you want to assign the selected employee?",
           name: "employeeRole",
           choices: async function() {
-            const roleList = await connection.promise().query(
+            const roleList = await db.promise().query(
               `SELECT role.id AS role_id, role.title AS job_title FROM role;`
             );
             return roleList[0];
@@ -209,7 +209,7 @@ const init = () => {
         }
       ]);
       const sql = `UPDATE role SET role = ? WHERE id = ?`;
-      const params = [req.body.role, req.params.id];
+      const params = [answers.title];
       db.query(sql, params, (err, res) => {
         if (err) {
           console.error(err);
