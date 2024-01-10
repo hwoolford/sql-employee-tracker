@@ -237,7 +237,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 
-
+// PREVIOUS CODE BELOW --------------------------------------------------------------------------
 
 
 
@@ -468,7 +468,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //         }
 //       });
 //     } else if (question === "Add Department") {
-//       // app.post("/api/new-department", ({ body }, res) => {
+//      
 //       const sql = `INSERT INTO department (department_name) VALUES (?)`;
 //       const params = [answers.department];
 
@@ -477,16 +477,11 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //           console.error(err);
 //           return;
 //         } else {
-//           // res.json({
-//           //   message: "Department name added to the database.",
-//           //   data: body,
-//           // });
-//           // });
 //           init();
 //         }
 //       });
 //     } else if (question === "Add Role") {
-//       // app.post("/api/new-role", ({ body }, res) => {
+//    
 //       const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
 //       const params = [answers.title, answers.salary, answers.department];
 
@@ -494,16 +489,14 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //         if (err) {
 //           console.error(err);
 //           return;
-//         }
-//         // res.json({
-//         //   message: "Role added to the database.",
-//         //   data: body,
-//         // });
-//         init();
+//         } else {
+//             init();
+//             }
+// //         
+//         
 //       });
 //       // });
 //     } else if (question === "Add Employee") {
-//       // app.post("/api/new-employee", ({ body }, res) => {
 //       const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
 //       const params = [
 //         answers.first_name,
@@ -517,16 +510,13 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //         if (err) {
 //           console.error(err)
 //         } else {
-//         // res.json({
-//         //   message: "Employee added to the database.",
-//         //   data: body,
-//         // });
+//        
 //         init();
 //       }
 //       });
-//       // });
+//       
 //     } else if (question === "Update Employee Role") {
-//       // app.put("/api/role/:id", (req, res) => {
+//      
 //       const sql = `UPDATE role SET role = ? WHERE id = ?`;
 //       const params = [req.body.role, req.params.id];
 
@@ -539,7 +529,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //           init();
 //         }
 //       });
-//       // });
+//       
       
 //     }
 //   });
@@ -547,74 +537,6 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // init();
 
-// // Add a new department
-// // app.post('/api/new-department', ({body}, res) => {
-// //   const sql = `INSERT INTO department (department_name) VALUES (?)`;
-// //   const params = [body.department_name];
-
-// //   db.query(sql, params, (err, result) => {
-// //     if (err) {
-// //       res.status(400).json({error: err.message});
-// //       return;
-// //     }
-// //     res.json({
-// //       message: 'Department name added to the database.',
-// //       data: body
-// //     });
-// //   });
-// // });
-
-// // Add a new role
-// // app.post('/api/new-role', ({body}, res) => {
-// //   const sql = `INSERT INTO role (title, salary, department_name) VALUES (?)`;
-// //   const params = [body.title, body.salary, body.department_name];
-
-// //   db.query(sql, params, (err, result) => {
-// //     if (err) {
-// //       res.status(400).json({error: err.message});
-// //       return;
-// //     }
-// //     res.json({
-// //       message: 'Role added to the database.',
-// //       data: body
-// //     });
-// //   });
-// // });
-
-// // Add a new employee
-// // app.post('/api/new-employee', ({body}, res) => {
-// //     const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
-// //     const params = [body.first_name, body.last_name, body.title, body.manager_first_name, body.manager_last_name];
-
-// //   db.query(sql, params, (err, result) => {
-// //     if (err) {
-// //       res.status(400).json({error: err.message});
-// //       return;
-// //     }
-// //     res.json({
-// //       message: 'Employee added to the database.',
-// //       data: body
-// //     });
-// //   });
-// // });
-
-// // // Update employee role
-// // app.put('/api/role/:id', (req, res) => {
-// //   const sql = `UPDATE role SET role = ? WHERE id = ?`;
-// //   const params = [req.body.role, req.params.id];
-
-// //   db.query(sql, params, (err, result) => {
-// //     if (err) {
-// //       res.status(400).json({ error: err.message });
-// //     } else {
-// //       res.json({
-// //         message: 'Employee role updated.',
-// //         data: req.body,
-// //         changes: result.affectedRows
-// //       });
-// //     }
-// //   });
-// // });
 
 // // Response for any requests not found
 // app.use((req, res) => {
