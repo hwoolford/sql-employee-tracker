@@ -155,10 +155,13 @@ const init = () => {
           message: "What is the employee's role?",
           name: "employeeRole",
           choices: async function() {
-            const roleList = await db.promise().query(
+            const [rows] = await db.promise().query(
               `SELECT role.id AS role_id, role.title AS job_title FROM role;`
             );
-            return roleList[0];
+            return rows.map(row => ({
+              value: row.id,
+              name: row.job_title
+            }))
           }
         },
         {
@@ -166,29 +169,30 @@ const init = () => {
           message: "Who is the employee's manager?",
           name: "employeeManager",
           choices: async function() {
-            const managerList = await db.promise().query(
-              `SELECT employee.id AS value, employee.first_name AS first, employee.last_name AS last FROM employee;`
+            const [rows] = await db.promise().query(
+              `SELECT employee.id AS value, CONCAT(employee.first_name, ' ', employee.last_name) AS name FROM employee;`
             );
-            return managerList[0];
+            return rows;
           }
         }
       ])
-      const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
-      const params = [
-        answers.first_name,
-        answers.last_name,
-        answers.title,
-        answers.manager_first_name,
-        answers.manager_last_name,
-      ];
-      db.query(sql, params, (err, res) => {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        } else {
-          console.log("\nEmployee has been added successfully")
-          init();
-        }
+      .then(answers => {
+        const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
+          const params = [
+          answers.first_name,
+          answers.last_name,
+          answers.role_id,
+          answers.manager_id,
+        ];
+        db.query(sql, params, (err, res) => {
+          if (err) {
+            console.error(err);
+            process.exit(1);
+          } else {
+            console.log("\nEmployee has been added successfully")
+            init();
+          }
+        });
       });
     } else if (question === "Update Employee Role") {
       inquirer.prompt([
@@ -197,10 +201,10 @@ const init = () => {
           message: "Which Employee's role do you want to update?",
           name: "updateRole",
           choices: async function() {
-            const employeeList = await db.promise().query(
-              `SELECT employee.first_name AS first, employee.last_name AS last FROM employee;`
+            const [rows] = await db.promise().query(
+              `SELECT employee.id AS value, CONCAT(employee.first_name, ' ', employee.last_name) AS name FROM employee;`
             );
-            return employeeList[0];
+            return rows;
           }
         },
         {
@@ -208,22 +212,25 @@ const init = () => {
           message: "Which role do you want to assign the selected employee?",
           name: "employeeRole",
           choices: async function() {
-            const roleList = await db.promise().query(
+            const [rows] = await db.promise().query(
               `SELECT role.id AS role_id, role.title AS job_title FROM role;`
             );
-            return roleList[0];
+            return rows.map(row => ({
+              value: row.id,
+              name: row.job_title
+            }))
           }
         }
       ])
       .then(answers => {
-        const sql = `UPDATE role SET role = ? WHERE id = ?`;
-        const params = [answers.title];
+        const sql = `UPDATE role SET title = ? WHERE id = ?`;
+        const params = [answers.title, answers.id];
         db.query(sql, params, (err, res) => {
           if (err) {
             console.error(err);
             process.exit(1);
           } else {
-            console.log("\nEmployee role has been updated successfully")
+            console.log("\nEmployee role has been updated successfully\n")
             init();
           }
         })
