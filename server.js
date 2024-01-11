@@ -93,7 +93,7 @@ const init = () => {
             console.error(err);
             process.exit(1);
           } else {
-            console.log("Department has been added successfully");
+            console.log("\nDepartment has been added successfully\n");
             init();
           }
         });
@@ -127,7 +127,7 @@ const init = () => {
       ])
       .then(answers => {
         const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
-        const params = [answers.title, answers.salary, answers.department];
+        const params = [answers.role, answers.roleSalary, answers.roleDepartment];
         db.query(sql, params, (err, res) => {
           if (err) {
             console.error(err);
@@ -170,7 +170,7 @@ const init = () => {
           name: "employeeManager",
           choices: async function() {
             const [rows] = await db.promise().query(
-              `SELECT employee.id AS value, CONCAT(employee.first_name, ' ', employee.last_name) AS name FROM employee;`
+              `SELECT employee.id AS value, CONCAT(employee.first_name, ' ', employee.last_name) AS name FROM employee WHERE employee.role_id IN (SELECT id FROM role WHERE manager_id = true);`
             );
             return rows;
           }
@@ -179,17 +179,17 @@ const init = () => {
       .then(answers => {
         const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
           const params = [
-          answers.first_name,
-          answers.last_name,
-          answers.role_id,
-          answers.manager_id,
+            answers.employeeFirst,
+            answers.employeeLast,
+            answers.employeeRole,
+            answers.employeeManager,
         ];
         db.query(sql, params, (err, res) => {
           if (err) {
             console.error(err);
             process.exit(1);
           } else {
-            console.log("\nEmployee has been added successfully")
+            console.log("\nEmployee has been added successfully\n")
             init();
           }
         });
