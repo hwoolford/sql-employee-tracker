@@ -84,17 +84,19 @@ const init = () => {
           message: "What is the name of the department?",
           name: "department"
         }
-      ]);
-      const sql = `INSERT INTO department (department_name) VALUES (?)`;
-      const params = [answers.department];
-      db.query(sql, params, (err, res) => {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        } else {
-          console.log("Department has been added successfully")
-          init();
-        }
+      ])
+      .then(answers => {
+        const sql = `INSERT INTO department (department_name) VALUES (?)`;
+        const params = [answers.department];
+        db.query(sql, params, (err, res) => {
+          if (err) {
+            console.error(err);
+            process.exit(1);
+          } else {
+            console.log("Department has been added successfully");
+            init();
+          }
+        });
       });
     } else if (question === "Add Role") {
       inquirer.prompt([
@@ -119,18 +121,20 @@ const init = () => {
             return deptList[0];
           }
         }
-      ]);
-      const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
-      const params = [answers.title, answers.salary, answers.department];
-      db.query(sql, params, (err, res) => {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        } else {
-          console.log("\nEmployee role has been added successfully")
-          init();
-        }
-      });
+      ])
+      .then(answers => {
+        const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+        const params = [answers.title, answers.salary, answers.department];
+        db.query(sql, params, (err, res) => {
+          if (err) {
+            console.error(err);
+            process.exit(1);
+          } else {
+            console.log("\nEmployee role has been added successfully\n")
+            init();
+          }
+        });
+      })
     } else if (question === "Add Employee") {
       inquirer.prompt([
         {
