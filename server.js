@@ -115,10 +115,13 @@ const init = () => {
           message: "Which department does the role belong to?",
           name: "roleDepartment",
           choices: async function() {
-            const deptList = await db.promise().query(
-              `SELECT id AS department_id, department_name AS department FROM department;`
+            const [rows] = await db.promise().query(
+              `SELECT id, department_name FROM department;`
             );
-            return deptList[0];
+            return rows.map(row => ({
+              value: row.id,
+              name: row.department_name
+            }));
           }
         }
       ])
@@ -169,7 +172,7 @@ const init = () => {
             return managerList[0];
           }
         }
-      ]);
+      ])
       const sql = `INSERT INTO employee (first_name, last_name, title, manager_first_name, manager_last_name) VALUES (?, ?, ?, ?, ?)`;
       const params = [
         answers.first_name,
@@ -211,18 +214,20 @@ const init = () => {
             return roleList[0];
           }
         }
-      ]);
-      const sql = `UPDATE role SET role = ? WHERE id = ?`;
-      const params = [answers.title];
-      db.query(sql, params, (err, res) => {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        } else {
-          console.log("\nEmployee role has been updated successfully")
-          init();
-        }
-      })
+      ])
+      .then(answers => {
+        const sql = `UPDATE role SET role = ? WHERE id = ?`;
+        const params = [answers.title];
+        db.query(sql, params, (err, res) => {
+          if (err) {
+            console.error(err);
+            process.exit(1);
+          } else {
+            console.log("\nEmployee role has been updated successfully")
+            init();
+          }
+        })
+      });
     } else if (question === "Quit") {
       console.log("\nGoodbye!")
       process.exit(1);
