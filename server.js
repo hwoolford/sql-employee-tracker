@@ -156,12 +156,9 @@ const init = () => {
           name: "employeeRole",
           choices: async function() {
             const [rows] = await db.promise().query(
-              `SELECT role.id AS role_id, role.title AS job_title FROM role;`
+              `SELECT role.id AS value, role.title AS name FROM role;`
             );
-            return rows.map(row => ({
-              value: row.id,
-              name: row.job_title
-            }))
+            return rows;
           }
         },
         {
@@ -199,7 +196,7 @@ const init = () => {
         {
           type: "list",
           message: "Which Employee's role do you want to update?",
-          name: "updateRole",
+          name: "employee_id",
           choices: async function() {
             const [rows] = await db.promise().query(
               `SELECT employee.id AS value, CONCAT(employee.first_name, ' ', employee.last_name) AS name FROM employee;`
@@ -210,21 +207,18 @@ const init = () => {
         {
           type: "list",
           message: "Which role do you want to assign the selected employee?",
-          name: "employeeRole",
+          name: "role_id",
           choices: async function() {
             const [rows] = await db.promise().query(
-              `SELECT role.id AS role_id, role.title AS job_title FROM role;`
+              `SELECT role.id AS value, role.title AS name FROM role;`
             );
-            return rows.map(row => ({
-              value: row.id,
-              name: row.job_title
-            }))
+            return rows
           }
         }
       ])
       .then(answers => {
-        const sql = `UPDATE role SET title = ? WHERE id = ?`;
-        const params = [answers.title, answers.id];
+        const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+        const params = [answers.role_id, answers.employee_id];
         db.query(sql, params, (err, res) => {
           if (err) {
             console.error(err);
